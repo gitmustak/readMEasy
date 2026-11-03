@@ -19,5 +19,5 @@ A Chrome extension that translates selected text in place, so you can read Benga
 
 ## Credits
 
-The Bengali reading font is [Bornomala](বর্ণমালা)(https://fontbd.com/free-font/bornomala/), bundled in `fonts/` under the SIL Open Font License.
+The Bengali reading font is [Bornomala] ( বর্ণমালা )(https://fontbd.com/free-font/bornomala/), bundled in `fonts/` under the SIL Open Font License.
 
