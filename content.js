@@ -95,7 +95,54 @@ if (!window.__inlineTranslatorLoaded) {
     if (records.length) startObserving();
   }
 
+  const FONT_FAMILY = "ReadMEasy Bornomala";
+  const fontSpans = [];
+  let fontLoading = null;
+
+  // Loaded via the FontFace API from raw bytes so the page's CSP can't block it.
+  function loadFont() {
+    if (!fontLoading) {
+      fontLoading = fetch(chrome.runtime.getURL("fonts/Bornomala-Regular.ttf"))
+        .then((r) => r.arrayBuffer())
+        .then((buf) => new FontFace(FONT_FAMILY, buf).load())
+        .then((face) => document.fonts.add(face))
+        .catch((e) => {
+          fontLoading = null;
+          throw e;
+        });
+    }
+    return fontLoading;
+  }
+
+  async function applyFont() {
+    if (!savedRange) return;
+    await loadFont();
+    const range = savedRange;
+    for (const node of textNodesIn(range)) {
+      const start = node === range.startContainer ? range.startOffset : 0;
+      const end = node === range.endContainer ? range.endOffset : node.data.length;
+      if (!node.data.slice(start, end).trim()) continue;
+      const r = document.createRange();
+      r.setStart(node, start);
+      r.setEnd(node, end);
+      const span = document.createElement("span");
+      span.style.setProperty("font-family", `"${FONT_FAMILY}"`, "important");
+      r.surroundContents(span);
+      fontSpans.push(span);
+    }
+    window.getSelection().removeAllRanges();
+    savedRange = null;
+  }
+
+  function unwrapFont() {
+    for (const span of fontSpans) {
+      if (span.isConnected) span.replaceWith(...span.childNodes);
+    }
+    fontSpans.length = 0;
+  }
+
   function restore() {
+    unwrapFont();
     stopObserving();
     for (const r of records) {
       if (r.node.isConnected && r.node.data === r.applied) r.node.data = r.full;
@@ -108,14 +155,20 @@ if (!window.__inlineTranslatorLoaded) {
       const sel = window.getSelection();
       if (!sel || sel.isCollapsed) {
         savedRange = null;
-        sendResponse({ text: "", translated: records.length > 0 });
+        sendResponse({ text: "", translated: (records.length > 0 || fontSpans.length > 0) });
       } else {
         savedRange = sel.getRangeAt(0).cloneRange();
-        sendResponse({ text: sel.toString(), translated: records.length > 0 });
+        sendResponse({ text: sel.toString(), translated: (records.length > 0 || fontSpans.length > 0) });
       }
     } else if (msg.type === "replace") {
       replaceSelection(msg.text);
       sendResponse({ ok: true });
+    } else if (msg.type === "font") {
+      applyFont().then(
+        () => sendResponse({ ok: true }),
+        (e) => sendResponse({ ok: false, error: String(e) })
+      );
+      return true; // async response
     } else if (msg.type === "restore") {
       restore();
       sendResponse({ ok: true });

@@ -55,6 +55,7 @@ const send = (msg) => chrome.tabs.sendMessage(tabId, msg);
 const PROMPT = "Select any text to translate";
 let idleTimer;
 const actionBtn = $("action");
+const fontBtn = $("font");
 let mode = "none"; // "none" | "translate" | "restore"
 
 function setMode(next) {
@@ -62,6 +63,7 @@ function setMode(next) {
   actionBtn.hidden = next === "none";
   actionBtn.textContent = next === "restore" ? "Restore original" : "Translate";
   actionBtn.classList.toggle("secondary", next === "restore");
+  fontBtn.hidden = next !== "translate";
 }
 
 async function init() {
@@ -113,6 +115,21 @@ async function restoreOriginal() {
     if (mode === "none") setStatus(PROMPT);
   }, 1800);
 }
+
+fontBtn.addEventListener("click", async () => {
+  fontBtn.disabled = true;
+  try {
+    const res = await send({ type: "font" });
+    if (!res || !res.ok) throw new Error((res && res.error) || "Couldn't apply font");
+    setMode("restore");
+    setStatus("");
+    showToast("Font changed ✓");
+  } catch (e) {
+    setStatus(e.message || String(e), true);
+  } finally {
+    fontBtn.disabled = false;
+  }
+});
 
 $("lang").value = localStorage.getItem("lang") || "bn";
 $("lang").addEventListener("change", () => {

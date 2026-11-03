@@ -5,6 +5,9 @@
   "description": "Select text on any page and replace it in place with its English translation (Bengali / Hindi to English).",
   "permissions": ["activeTab", "scripting"],
   "host_permissions": ["https://translate.googleapis.com/*"],
+  "web_accessible_resources": [
+    { "resources": ["fonts/Bornomala-Regular.ttf"], "matches": ["<all_urls>"] }
+  ],
   "icons": {
     "16": "icons/icon16.png",
     "32": "icons/icon32.png",
