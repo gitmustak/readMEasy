@@ -58,24 +58,29 @@ const actionBtn = $("action");
 const fontBtn = $("font");
 let mode = "none"; // "none" | "translate" | "restore"
 
+let settings = { translate: true, font: true };
+
 function setMode(next) {
   mode = next;
-  actionBtn.hidden = next === "none";
+  actionBtn.hidden = next === "none" || (next === "translate" && !settings.translate);
   actionBtn.textContent = next === "restore" ? "Restore original" : "Translate";
   actionBtn.classList.toggle("secondary", next === "restore");
-  fontBtn.hidden = next !== "translate";
+  fontBtn.hidden = next !== "translate" || !settings.font;
 }
 
 async function init() {
   try {
+    settings = await chrome.storage.sync.get(settings);
     tabId = (await activeTab()).id;
     await inject(tabId);
     const sel = await send({ type: "getSelection" });
     selectedText = (sel && sel.text) || "";
     if (selectedText) {
       setMode("translate");
-      setStatus("");
-      prefetch();
+      setStatus(
+        settings.translate || settings.font ? "" : "Both options are turned off in Settings."
+      );
+      if (settings.translate) prefetch();
     } else if (sel && sel.translated) {
       setMode("restore");
       setStatus("This page has translated text.", false, true);
@@ -142,6 +147,11 @@ actionBtn.addEventListener("click", async () => {
   } catch (e) {
     setStatus(e.message || String(e), true);
   }
+});
+
+$("settings").addEventListener("click", (e) => {
+  e.preventDefault();
+  chrome.runtime.openOptionsPage();
 });
 
 init();

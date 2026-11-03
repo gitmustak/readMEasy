@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ReadMEasy Settings</title>
+  <style>
+    :root {
+      --cream: #FFF3D5;
+      --green: #4D694E;
+      --bg: var(--cream);
+      --ink: var(--green);
+      --surface: color-mix(in srgb, var(--green) 10%, var(--cream));
+      --border: color-mix(in srgb, var(--green) 30%, var(--cream));
+      --muted: color-mix(in srgb, var(--green) 70%, var(--cream));
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: var(--green);
+        --ink: var(--cream);
+        --surface: color-mix(in srgb, var(--cream) 12%, var(--green));
+        --border: color-mix(in srgb, var(--cream) 30%, var(--green));
+        --muted: color-mix(in srgb, var(--cream) 75%, var(--green));
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 32px 16px;
+      background: var(--bg);
+      color: var(--ink);
+      font: 14px/1.4 ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+            "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    header { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+    header img { width: 32px; height: 32px; border-radius: 8px; }
+    h1 { margin: 0; font-size: 18px; }
+    .setting {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      cursor: pointer;
+    }
+    .setting strong { display: block; font-size: 14px; }
+    .setting span.desc { font-size: 12px; color: var(--muted); }
+    .switch { position: relative; flex: none; width: 40px; height: 22px; }
+    .switch input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+    .track {
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      background: var(--border);
+      transition: background 0.15s;
+      pointer-events: none;
+    }
+    .track::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--bg);
+      transition: transform 0.15s;
+    }
+    input:checked + .track { background: var(--ink); }
+    input:checked + .track::after { transform: translateX(18px); }
+    input:focus-visible + .track { outline: 2px solid var(--ink); outline-offset: 2px; }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="icons/icon48.png" alt="">
+    <h1>ReadMEasy Settings</h1>
+  </header>
+
+  <label class="setting">
+    <div>
+      <strong>Translate button</strong>
+      <span class="desc">Show the Translate option in the popup</span>
+    </div>
+    <div class="switch"><input type="checkbox" id="translate"><div class="track"></div></div>
+  </label>
+
+  <label class="setting">
+    <div>
+      <strong>Easier Bengali font button</strong>
+      <span class="desc">Show the Bornomala font option in the popup</span>
+    </div>
+    <div class="switch"><input type="checkbox" id="font"><div class="track"></div></div>
+  </label>
+
+  <script src="options.js"></script>
+</body>
+</html>

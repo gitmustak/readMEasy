@@ -3,7 +3,8 @@
   "name": "ReadMEasy",
   "version": "0.1.0",
   "description": "Select text on any page and replace it in place with its English translation (Bengali / Hindi to English).",
-  "permissions": ["activeTab", "scripting"],
+  "permissions": ["activeTab", "scripting", "storage"],
+  "options_ui": { "page": "options.html", "open_in_tab": true },
   "host_permissions": ["https://translate.googleapis.com/*"],
   "web_accessible_resources": [
     { "resources": ["fonts/Bornomala-Regular.ttf"], "matches": ["<all_urls>"] }

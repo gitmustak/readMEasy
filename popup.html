@@ -98,6 +98,11 @@
     #font:hover { background: var(--surface); }
     #action.secondary:hover { background: var(--surface); opacity: 1; }
 
+    #settings { display: flex; justify-content: center; margin-top: 12px; color: var(--muted); }
+    #settings img { opacity: 0.85; transition: opacity 0.15s; }
+    #settings:hover img { opacity: 1; }
+    /* the icon is black; flip it to light on the dark theme */
+    @media (prefers-color-scheme: dark) { #settings img { filter: invert(1); } }
     .slot { position: relative; height: 36px; margin-top: 14px; }
 
     #status {
@@ -167,6 +172,7 @@
     <div id="status">Select any text to translate</div>
     <div id="toast"><span></span></div>
   </div>
+  <a id="settings" href="#" aria-label="Settings" title="Settings"><img src="control icon.png" alt="" width="20" height="20"></a>
   <script src="popup.js"></script>
 </body>
 </html>

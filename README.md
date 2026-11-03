@@ -9,6 +9,7 @@ A Chrome extension that translates selected text in place, so you can read Benga
 - Works on dynamic sites like Facebook and Instagram
 - Show selected Bengali text in an easier-to-read font (Bornomala)
 - Restore the original text with one click
+- Settings page to turn the Translate and Easier Bengali font buttons on or off
 
 ## How to use
 
