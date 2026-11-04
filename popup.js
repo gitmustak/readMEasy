@@ -52,7 +52,7 @@ async function inject(id) {
 
 const send = (msg) => chrome.tabs.sendMessage(tabId, msg);
 
-const PROMPT = "Select any text to translate";
+const PROMPT = "Select text first";
 let idleTimer;
 const actionBtn = $("action");
 const fontBtn = $("font");
@@ -71,6 +71,7 @@ function setMode(next) {
 async function init() {
   try {
     settings = await chrome.storage.sync.get(settings);
+    $("langRow").hidden = !settings.translate;
     tabId = (await activeTab()).id;
     await inject(tabId);
     const sel = await send({ type: "getSelection" });

@@ -127,6 +127,9 @@ if (!window.__inlineTranslatorLoaded) {
       r.setEnd(node, end);
       const span = document.createElement("span");
       span.style.setProperty("font-family", `"${FONT_FAMILY}"`, "important");
+      span.style.setProperty("font-size", "1.1em", "important");
+      span.style.setProperty("letter-spacing", "0.06em", "important");
+      span.style.setProperty("line-height", "1.6", "important");
       r.surroundContents(span);
       fontSpans.push(span);
     }

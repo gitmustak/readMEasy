@@ -38,11 +38,12 @@
     }
 
     header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-    header img { width: 32px; height: 32px; border-radius: 8px; }
+    header > img { width: 32px; height: 32px; border-radius: 8px; }
     h1 { margin: 0; font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
-    .tag { margin: 1px 0 0; font-size: 12px; color: var(--muted); }
 
     .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+
+    .row[hidden] { display: none; }
 
     label {
       display: block;
@@ -98,7 +99,7 @@
     #font:hover { background: var(--surface); }
     #action.secondary:hover { background: var(--surface); opacity: 1; }
 
-    #settings { display: flex; justify-content: center; margin-top: 12px; color: var(--muted); }
+    #settings { display: flex; margin-left: auto; }
     #settings img { opacity: 0.85; transition: opacity 0.15s; }
     #settings:hover img { opacity: 1; }
     /* the icon is black; flip it to light on the dark theme */
@@ -150,11 +151,11 @@
     <img src="icons/icon48.png" alt="">
     <div>
       <h1>ReadMEasy</h1>
-      <p class="tag">Read it in English, right where it is</p>
     </div>
+    <a id="settings" href="#" aria-label="Settings" title="Settings"><img src="control icon.png" alt="" width="20" height="20"></a>
   </header>
 
-  <div class="row">
+  <div class="row" id="langRow">
   <label for="lang">Translate from</label>
   <select id="lang">
     <option value="bn">Bengali → English</option>
@@ -169,10 +170,9 @@
   </div>
 
   <div class="slot">
-    <div id="status">Select any text to translate</div>
+    <div id="status">Select text first</div>
     <div id="toast"><span></span></div>
   </div>
-  <a id="settings" href="#" aria-label="Settings" title="Settings"><img src="control icon.png" alt="" width="20" height="20"></a>
   <script src="popup.js"></script>
 </body>
 </html>
